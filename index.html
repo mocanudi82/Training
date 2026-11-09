@@ -624,20 +624,29 @@ body #main .sess-title{font-family:var(--fh)!important;font-weight:700;font-size
 .stk .side{top:20px!important}
 
 .wrap{padding-top:env(safe-area-inset-top,0px)}
+
+/* pinned top bar: title + icons, thin line */
+.pin{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:10px 0 6px;margin-bottom:6px;border-bottom:1px solid color-mix(in srgb,var(--ink) 30%,transparent)}
+.pin .brand{display:block!important;min-width:0;max-width:calc(100% - 128px)}
+.pin .side{position:static!important;background:none!important;padding:0!important;margin:0!important;display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex:0 0 auto}
+.pin .side .mi{display:flex;gap:5px}
+.pin .side .mt{display:flex;flex-direction:column;align-items:flex-end;font-size:9.5px;line-height:1.35;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.pin .bt2{margin:2px 0 2px!important}
+.topline{padding-top:0!important}
+
+.pin{padding-bottom:9px!important}.ex{scroll-margin-top:96px}
 </style>
 
 </head><body>
 <div class="wrap">
-  <div class="stk">
-      <div class="side"><div class="mi">
+  <div class="pin"><div class="brand"><h1 aria-label="Ski Training"><span class="ski">Ski Training</span></h1><div class="bt2"><span class="sub">5 weeks</span><span class="sub">by Dani M</span></div></div>
+<div class="side"><div class="mi">
       <button class="iconbtn" id="btnProg" aria-label="Progress charts" title="Progress">📈</button>
       <button class="iconbtn" id="btnWeek" aria-label="Week overview" title="Week overview">≡</button>
       <button class="iconbtn" id="btnSet" aria-label="Settings" title="Settings">⚙</button></div>
       <div class="mt"><span id="mastW"></span></div></div>
   </div>
   <header class="top">
-    <div class="topline"><div class="brand"><h1 aria-label="Ski Training"><span class="ski">Ski Training</span></h1><div class="bt2"><span class="sub">5 weeks</span><span class="sub">by Dani M</span></div></div>
-</div>
     <div class="scroller" id="weeks"></div>
     <div class="tabs" id="tabs"></div>
     <div class="bar"><i id="prog"></i></div>
