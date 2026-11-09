@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#222a2a">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Ski Training">
 <link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><link rel="icon" href="icon-192.png">
@@ -562,6 +562,27 @@ body{background:var(--bg)!important}
 .wk.on{outline-color:#222a2a}.tab.on{outline-color:#222a2a}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .wk.on,:root:not([data-theme="light"]) .tab.on{outline-color:#e2dac2}}
 :root[data-theme="dark"] .wk.on,:root[data-theme="dark"] .tab.on{outline-color:#e2dac2}
+
+/* no zoom, one font, 6 progress shades, tags on one line */
+html{touch-action:manipulation;-webkit-text-size-adjust:100%}
+input,textarea,select{font-size:16px!important}
+body,body *:not(.ski):not(.ski *){font-family:var(--fb)!important}
+.num,.set,.kg,.spec b,.cnt,.wk span,.tab small,.tjh,.sclk b,.big,.emom,.pbar button,.mrow button{font-variant-numeric:tabular-nums}
+.sess-title{font-family:var(--fb)!important;font-weight:800;font-size:19px!important}
+.brand{display:flex!important;flex-wrap:wrap;align-items:flex-end;gap:2px 10px}
+.brand h1{margin:0!important}
+.bt2{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:6px;margin:0 0 8px!important;white-space:nowrap}
+.bt2 .sub{display:inline-block}
+:root:root:root .wk{--c0:#fdf0e0;--c1:#fbdcb2;--c2:#f8c283;--c3:#f5a64a;--c4:#ee8710;--c5:#b85a05}
+:root:root:root .tab{--c0:#fde8e3;--c1:#f9cbc1;--c2:#f4a595;--c3:#ee7b63;--c4:#e8502f;--c5:#9e2610}
+.wk.l5,.tab.l5{background:var(--c5)!important;color:#fff!important}
+.wk.l4,.tab.l4{background:var(--c4)!important;color:#222a2a!important}
+.wk.l3,.tab.l3{background:var(--c3)!important;color:#222a2a!important}
+@media (prefers-color-scheme: dark){:root:root:root:not([data-theme="light"]) .wk{--c0:#3a4848;--c1:#55402a;--c2:#765127;--c3:#a36a1c;--c4:#d6841a;--c5:#f39120}:root:root:root:not([data-theme="light"]) .tab{--c0:#3a4848;--c1:#573b36;--c2:#7a3d30;--c3:#a63f29;--c4:#d3431f;--c5:#ec4624}:root:root:root:not([data-theme="light"]) .wk.l5,:root:root:root:not([data-theme="light"]) .tab.l5,:root:root:root:not([data-theme="light"]) .wk.l4,:root:root:root:not([data-theme="light"]) .tab.l4{color:#1d2626!important}:root:root:root:not([data-theme="light"]) .wk.l3,:root:root:root:not([data-theme="light"]) .tab.l3{color:#f3efe4!important}}
+:root:root:root[data-theme="dark"] .wk{--c0:#3a4848;--c1:#55402a;--c2:#765127;--c3:#a36a1c;--c4:#d6841a;--c5:#f39120}
+:root:root:root[data-theme="dark"] .tab{--c0:#3a4848;--c1:#573b36;--c2:#7a3d30;--c3:#a63f29;--c4:#d3431f;--c5:#ec4624}
+:root:root:root[data-theme="dark"] .wk.l5,:root:root:root[data-theme="dark"] .tab.l5,:root:root:root[data-theme="dark"] .wk.l4,:root:root:root[data-theme="dark"] .tab.l4{color:#1d2626!important}
+:root:root:root[data-theme="dark"] .wk.l3,:root:root:root[data-theme="dark"] .tab.l3{color:#f3efe4!important}
 </style>
 
 </head><body>
@@ -642,7 +663,7 @@ function totals(sess,wi){let d=0,t=0;for(const it of visibleEx(sess,wi)){if(it.t
 function painKey(wi,sid){return wi+'|'+sid}
 function painOrder(){const o=[];PLAN.weeks.forEach((_,wi)=>PLAN.sessions.forEach(s=>{const v=S.pain[painKey(wi,s.id)];if(v!=null)o.push({wi,sid:s.id,v})}));return o}
 // ---- render
-function lvl(p){return p<=0?0:p<.34?1:p<.67?2:p<1?3:4}
+function lvl(p){return p<=0?0:p>=1?5:p<.25?1:p<.5?2:p<.75?3:4}
 function weekP(wi){let d=0,t=0;PLAN.sessions.forEach(s=>{const x=totals(s,wi);if(!x.t)return;t+=x.t;d+=S.fin[wi+'|'+s.id]?x.t:x.d});return t?d/t:0}
 function renderWeeks(){
   $('weeks').innerHTML=PLAN.weeks.map((w,i)=>`<button class="wk ${i===S.week?'on':''} l${lvl(weekP(i))}" data-w="${i}"><b>${w.label}</b><span>${fmtDate(w.date)}</span></button>`).join('');
@@ -883,7 +904,7 @@ function clockStop(k){if(S.t0[k]){S.dur[k]=durNow(k);delete S.t0[k]}}
 let CLI=null;
 function drawClock(k){
   const el=$('sclk');if(!el)return;const run=!!S.t0[k];const d=durNow(k);
-  el.innerHTML=`<button id="ckB">${run?'⏸ Pause':(d?'▶ Resume':'▶ Start session')}</button><b id="ckT">${d?mmss(d):''}</b>${d&&!run?'<button id="ckR">Reset</button>':''}<button id="ckE" class="ckE" aria-label="Edit total time">✎</button><span class="muted small">${d?'of 80 min':'time the session'}</span>`;
+  el.innerHTML=`<button id="ckB">${run?'⏸ Pause':(d?'▶ Resume':'▶ Start session')}</button><b id="ckT">${d?mmss(d):''}</b>${d&&!run?'<button id="ckR">Reset</button>':''}<button id="ckE" class="ckE" aria-label="Edit total time">✎ Edit time</button><span class="muted small">${d?'of 80 min':''}</span>`;
   $('ckE').onclick=()=>{if(S.t0[k])clockStop(k);const cur=Math.round(durNow(k)/60);
     el.innerHTML=`<label class="small muted">Total minutes</label><input id="ckI" class="ckI" type="number" inputmode="numeric" min="0" max="300" value="${cur||''}" placeholder="min"><button id="ckS">Save</button><button id="ckC">Cancel</button>`;
     $('ckI').focus();$('ckC').onclick=()=>drawClock(k);
