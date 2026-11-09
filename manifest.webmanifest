@@ -1,11 +1,11 @@
 {
- "name": "Ski Prep 5-Week",
- "short_name": "Ski Prep",
+ "name": "Ski Training",
+ "short_name": "Ski Training",
  "start_url": ".",
  "scope": ".",
  "display": "standalone",
- "background_color": "#14202b",
- "theme_color": "#14202b",
+ "background_color": "#222a2a",
+ "theme_color": "#222a2a",
  "icons": [
   {
    "src": "icon-192.png",
