@@ -583,6 +583,15 @@ body,body *:not(.ski):not(.ski *){font-family:var(--fb)!important}
 :root:root:root[data-theme="dark"] .tab{--c0:#3a4848;--c1:#573b36;--c2:#7a3d30;--c3:#a63f29;--c4:#d3431f;--c5:#ec4624}
 :root:root:root[data-theme="dark"] .wk.l5,:root:root:root[data-theme="dark"] .tab.l5,:root:root:root[data-theme="dark"] .wk.l4,:root:root:root[data-theme="dark"] .tab.l4{color:#1d2626!important}
 :root:root:root[data-theme="dark"] .wk.l3,:root:root:root[data-theme="dark"] .tab.l3{color:#f3efe4!important}
+
+*::before,*::after,svg text,.chart text{font-family:var(--fb)!important}
+.ski::before,.ski::after{font-family:inherit!important}
+
+.lockbn{display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;pointer-events:auto!important}
+.lockbn button{background:#ec4624;color:#fff;border-radius:999px;padding:6px 14px;font-weight:700}
+.locked>*:not(.lockbn){pointer-events:none}
+.locked #finBtn{pointer-events:auto}
+.locked .ex,.locked .card,.locked .sclk{opacity:.7}
 </style>
 
 </head><body>
@@ -793,7 +802,7 @@ function renderMain(){
   h+=`<div class="add"><button class="btn" id="addEx">+ Add exercise</button></div>
   <div class="card" style="margin-top:14px"><h2>Session notes</h2><textarea id="snote" placeholder="How it felt, what you changed…">${esc(S.notes[xk]||'')}</textarea></div>
   <div style="margin-top:12px"><button class="btn" id="finBtn">${S.fin[xk]?'Reopen day':'Finish day'}</button><button class="btn alt" id="resetSess">Clear this session</button></div>`;
-  $('main').innerHTML=(S.fin[xk]?'<div class="lockbn">Day finished · tap anywhere to reopen and edit</div>':'')+h;
+  $('main').innerHTML=(S.fin[xk]?'<div class="lockbn"><span>Day finished ✓</span><button id="reopenTop">Reopen day</button></div>':'')+h;
   $('main').classList.toggle('locked',!!S.fin[xk]);document.body.classList.toggle('lk',!!S.fin[xk]);
   // handlers
   
@@ -836,6 +845,7 @@ function renderMain(){
     card.querySelector('[data-xkg]').oninput=e=>{x.kg=e.target.value;save()};
     card.querySelector('[data-del]').onclick=()=>{S.extra[xk].splice(xi,1);save();renderMainKeepScroll()}});
   $('addEx').onclick=()=>openAdd(xk);
+  const rt=$('reopenTop');if(rt)rt.onclick=()=>{delete S.fin[xk];save();renderAll()};
   $('finBtn').onclick=()=>{if(S.fin[xk])delete S.fin[xk];else{S.fin[xk]=1;clockStop(xk)}save();renderAll()};
   drawClock(xk);
   const sn=$('snote');sn.oninput=()=>{S.notes[xk]=sn.value;save()};
@@ -1034,7 +1044,6 @@ $('btnSet').onclick=()=>{
   openSheet('sheetSet');
 };
 try{const th=localStorage.getItem('ski5week.theme');if(th)document.documentElement.setAttribute('data-theme',th)}catch(e){}
-$('main').addEventListener('click',e=>{const xk=S.week+'|'+S.sess;if(!S.fin[xk])return;if(e.target.closest('a'))return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();delete S.fin[xk];save();renderAll()},true);
 renderAll();
 if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
 </script>
