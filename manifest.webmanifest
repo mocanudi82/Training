@@ -1,6 +1,6 @@
 {
- "name": "Ski Training",
- "short_name": "Ski Training",
+ "name": "Train",
+ "short_name": "Train",
  "start_url": ".",
  "scope": ".",
  "display": "standalone",
